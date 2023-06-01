@@ -1,0 +1,183 @@
+﻿@model WareHouseManagementSystem.Login
+@{
+    ViewBag.Title = "Registration";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Registration</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            background-image: url('https://cdn.fs.teachablecdn.com/Bfys5g7DRHmdqV8eCFAu');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .container {
+            margin-top: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 80px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-image: url('https://img.freepik.com/free-vector/blurred-background-with-light-colors_1034-245.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+
+
+
+        .form-horizontal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .text-danger {
+            color: #f00;
+        }
+
+        .btn-default {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .btn-default:hover {
+                background-color: #45a049;
+            }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h2 style="text-align:center">New User Registration</h2>
+            <hr />
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstName, "Firstname*", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastName, "Lastname*", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.username, "Email*", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.password, "Password*", htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.PasswordFor(model => model.password, new
+                    {
+                        @class = "form-control"@*, style = "height: 20px;"*@})
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("confirmPassword", "Confirm Password*", htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.Password("confirmPassword", null, new { @class = "form-control" })
+                </div>
+            </div>
+            @if (Model.password != null)
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            }
+
+
+            <div class="form-group">
+                @Html.Label("Employee Id", "Employee Id", htmlAttributes: new { @class = "control-label" })
+                <div class="input-group">
+                    @Html.Password("Employee Id", null, new { @class = "form-control" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Role, "Role*", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Role, new List<SelectListItem>
+                    {
+                        //new SelectListItem { Value = "select", Text = "Select" },
+                        new SelectListItem { Value = "employ", Text = "Employee" },
+                        new SelectListItem { Value = "customer", Text = "Customer" }
+                    }, "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Register" class="btn btn-default"  />
+                </div>
+            </div>
+
+        </div>
+        }
+
+    <div class="link">
+        <span style="font-size: 20px; text-align:center">&#x21A9</span>
+        @Html.ActionLink("Back To Login", "Login")
+    </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("form").validate();
+        });
+    </script>
+</body>
+</html>

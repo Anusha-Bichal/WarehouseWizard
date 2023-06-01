@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Warehouse Management Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    <style>
+        .sidebar {
+            width: 200px;
+            background-color: #9c9ca1;
+            float: left;
+            color:
+        }
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                .sidebar ul li {
+                    padding: 8px 16px;
+                    border-bottom: 1px solid #ddd;
+                    text-align: center;
+                    height: 80px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                }
+
+
+                    .sidebar ul li:last-child {
+                        border-bottom: none;
+                    }
+
+        .content {
+            margin-left: 200px;
+            padding: 16px;
+            animation: fade-in 2s ease-in-out;
+        }
+
+        /* Clearfix for the layout */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .navbar-brand.center {
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+           /* background-color: steelblue ;*/
+            color: ;
+            padding: 16px;
+            margin-bottom: 20px;
+            margin-left: 200px;
+            /*            animation: fade-in 1s ease-in-out;
+        */
+        }
+
+        .navbar {
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            left: 0;
+            top: 40px;
+            background-color: #62626e;
+            z-index: 1;
+        }
+
+       /* .navbar-brand {
+            color: olivedrab;
+            padding: 15px;
+            display: block;
+        }*/
+
+        .navbar-nav {
+            padding-top: 0px;
+        }
+
+            .navbar-nav li {
+                margin: 10px 0;
+            }
+
+                .navbar-nav li a {
+                    color: rosybrown;
+                    padding: 5px 15px;
+                    display: block;
+                }
+
+        /* Add styles to make links clickable */
+        a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #23527c;
+                text-decoration: underline;
+            }
+
+        @@keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-animation {
+        }
+
+        .nav-link.active {
+            background-color: white;
+        }
+
+      
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /*background-image: url('https://img.freepik.com/free-vector/blue-pink-halftone-background_53876-99004.jpg?w=2000');*/
+            background-color: #c9c5db;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            flex: 1;
+        }
+
+      
+
+
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse">
+        <div class="sidebar">
+            <ul>
+                <li class="nav-link">
+                    <div style="text-align: center;">
+                        <span style="display: block; font-size: 40px;">&#x1F464;</span>
+                        <span style="display: block;text-align:center">@Html.ActionLink("Profile", "Index", "Login")</span>
+                    </div>
+                </li>
+                <li class="nav-link">@Html.ActionLink("About", "About", "Home")</li>
+                <li class="nav-link">@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand center">
+                    <h1 style="text-align:center">WAREHOUSE WIZARD</h1>
+                </div>
+
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Add your additional navigation items here if needed -->
+                    <br />
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    @*<div style="text-align:right">@Html.ActionLink("Sign Out", "SignOut", "Login")</div>*@
+    @*<div style="text-align:right;display:inline-block;background-color:burlywood">
+            @Html.ActionLink("Sign Out", "SignOut", "Login", null, new { @id = "signOutLink" })
+        </div>*@
+
+    <div style="text-align: right;">
+        <div style="display: inline-block; background-color: #b4bbc2; padding: 10px; ">
+            <span style="font-size:40px">&#x1F512;</span>
+            @Html.ActionLink("Sign Out", "SignOut", "Login", null, new { @id = "signOutLink"})
+        </div>
+    </div>
+
+
+    @*@RenderBody()*@
+    <div class="content" style="margin-top: 40px;">
+        <script>
+            $(document).ready(function () {
+                $("form").validate();
+            });
+        </script>
+        @RenderBody()
+    </div>
+
+    <hr />
+
+    <footer>
+        <!-- Add your footer content here -->
+    </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        $(document).ready(function () {
+            $("form").validate();
+        });
+    </script>
+
+
+    @*<script>
+            $(document).ready(function () {
+                var currentUrl = window.location.pathname.toLowerCase();
+                var activeLink = null;
+
+                $('.nav-link').each(function () {
+                    var linkUrl = $(this).find('a').attr('href').toLowerCase();
+                    if (currentUrl.includes(linkUrl)) {
+                        activeLink = $(this);
+                        return false; // Break the loop once the active nav-link is found
+                    }
+                });
+
+                if (activeLink) {
+                    activeLink.addClass('active');
+                }
+
+                $('.nav-link').click(function (e) {
+                    e.preventDefault(); // Prevent the default link behavior
+
+                    if (!$(this).hasClass('active')) {
+                        $('.nav-link').removeClass('active');
+                        $(this).addClass('active');
+                    }
+                });
+
+                $('#signOutLink').click(function (e) {
+                    e.preventDefault();
+                    $('.nav-link').removeClass('active');
+                    $('.nav-link').eq(0).addClass('active');
+                    window.location.href = $(this).attr('href');
+                });
+            });
+        </script>*@
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            var currentUrl = window.location.pathname.toLowerCase();
+            var activeLink = null;
+
+            $('.nav-link').each(function () {
+                var linkUrl = $(this).find('a').attr('href').toLowerCase();
+                if (currentUrl.includes(linkUrl)) {
+                    activeLink = $(this);
+                    return false; // Break the loop once the active nav-link is found
+                }
+            });
+
+            if (activeLink) {
+                activeLink.addClass('active');
+            }
+
+            $('.nav-link').click(function (e) {
+                e.preventDefault(); // Prevent the default link behavior
+
+                if (!$(this).hasClass('active')) {
+                    $('.nav-link').removeClass('active');
+                    $(this).addClass('active');
+
+                    var url = $(this).find('a').attr('href');
+                    window.location.href = url; // Navigate to the clicked URL
+                }
+            });
+
+            $('#signOutLink').click(function (e) {
+                e.preventDefault();
+                $('.nav-link').removeClass('active');
+                $('.nav-link').eq(0).addClass('active');
+                window.location.href = $(this).attr('href');
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

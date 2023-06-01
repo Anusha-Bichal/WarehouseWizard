@@ -1,0 +1,176 @@
+﻿@model WareHouseManagementSystem.Login
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Warehouse Wizard</title>
+    <style>
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: paleturquoise;
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 60px;
+            box-sizing: border-box;
+            background-image: url('https://img.freepik.com/free-vector/blurred-background-with-light-colors_1034-245.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .form-horizontal .form-group {
+            margin-bottom: 20px;
+        }
+
+
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #f9f9f9;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+
+        .btn-login {
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+            .btn-login:hover {
+                background-color: #0069d9;
+            }
+
+        .login-links {
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .button-group input[type="submit"],
+            .button-group input[type="reset"] {
+                width: 48%;
+            }
+
+        .btn-reset {
+            background-color: lightgray; /* Set the desired color for the reset button */
+            color: #fff; /* Set the desired text color */
+            border-radius: 4px;
+        }
+
+            .btn-reset:hover {
+                background-color: darkgray; /* Set the desired color for the reset button on hover */
+            }
+
+        .custom-bg-image {
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="login-container custom-bg-image" style="background-image: url('https://www.cleverence.com/upload/iblock/ba0/3xi2r7m2a0pfuu2hedg51f2j93ypuk0v/EQHsG5vXkAEJr5D.jpg') ">
+
+
+
+    <div class="login-container">
+        <div class="login-form" style="padding-bottom: 10px;">
+            <h1 style="margin-bottom: 0; padding-bottom: 10px; font-size: 48px;">Warehouse Wizard</h1>
+            <h1 style="font-size: 100px; text-align: center; margin-top: -20px; padding-top: 0;">&#x1F464;</h1>
+            <h2 style="margin-bottom: 10px; margin-top: -20px; padding-top: 0">Login</h2>
+
+
+
+            @using (Html.BeginForm("Login", "Login", new { returnurl = Request.QueryString["ReturnUrl"] }, FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.username, "Email", htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Email@" } })
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.password, "Password", htmlAttributes: new { @class = "control-label" })
+                    @Html.PasswordFor(model => model.password, new { @class = "form-control", style = "height: 34px;", placeholder = "Password" })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                <div class="form-group">
+                    <div class="button-group">
+                        <input type="submit" value="Login" class="btn btn-primary btn-login" />
+                        <input type="reset" value="Reset" class="btn btn-secondary btn-reset" />
+
+                    </div>
+                </div>
+                <div class="login-links">
+                    @Html.ActionLink("Register", "Register", new { @class = "btn btn-link" })
+                    <span class="text-muted">|</span>
+                    @Html.ActionLink("Forgot password?", "resetPassword", new { @class = "btn btn-link" })
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include jQuery Validation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+    <!-- Include jQuery Validation Unobtrusive library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("form").validate();
+        });
+    </script>
+</body>
+</html>

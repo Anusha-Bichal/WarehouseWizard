@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WareHouseManagementSystem", "WareHouseManagementSystem\WareHouseManagementSystem.csproj", "{3C2C0502-F348-4199-83A3-6B007BCDE69A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C2C0502-F348-4199-83A3-6B007BCDE69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2C0502-F348-4199-83A3-6B007BCDE69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2C0502-F348-4199-83A3-6B007BCDE69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2C0502-F348-4199-83A3-6B007BCDE69A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BDBA5C45-9403-469C-B446-3344CF1CC7E3}
+	EndGlobalSection
+EndGlobal
