@@ -1,0 +1,160 @@
+﻿@*@model IEnumerable<WareHouseManagementSystem.Login>
+
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+
+    </table>*@
+
+
+@model IEnumerable<WareHouseManagementSystem.Login>
+
+@if (Model != null)
+{
+    <script>
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                var selectedCount = $("input[name='selectedItems']:checked").length;
+
+                if (selectedCount === 0) {
+                    alert("No items selected.");
+                    return false; // Prevent form submission
+                } else {
+                    var confirmation = confirm("Are you sure you want to save changes?");
+                    return confirmation; // Allow or prevent form submission based on user's choice
+                }
+            });
+        });
+    </script>
+    using (Html.BeginForm("checkOutRequest", "Login", FormMethod.Post))
+    {
+        <table class="table">
+            <tr>
+                <!-- ... your existing headers ... -->
+                <th>
+                    Select
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.FirstName)*@
+                    ProductName
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.LastName)*@
+                    UPC
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.username)*@
+                    Quantity
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.password)*@
+                    Check-In Time
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Role)*@
+                    Check-out Time
+                </th>
+                <th></th>
+                <!-- ... other header columns ... -->
+            </tr>
+
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                <input type="checkbox" name="selectedItems" value="@item.Id" />
+            </td>
+            <!-- ... your existing columns ... -->
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>*@
+            <!-- ... other data columns ... -->
+
+        </tr>
+            }
+        </table>
+
+        <button type="submit" id="submit-button">Check-Out</button>
+    }
+
+    <div>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+    </div>
+
+
+}
+else
+{
+    <p>No items to display.</p>
+}
