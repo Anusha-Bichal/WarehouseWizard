@@ -14,7 +14,7 @@ namespace WareHouseManagementSystem.Controllers
         warehousedbEntities db = new warehousedbEntities();
 
 
-           [Authorize(Roles = "Employee , Customer, Owner")]
+       //   [Authorize(Roles = "Employee , Customer, Owner")]
         public ActionResult Index()
         {
             var loggedInUser = User.Identity.Name;
@@ -431,8 +431,49 @@ namespace WareHouseManagementSystem.Controllers
             return View(db.Logins.ToList());
         }
 
-        
 
+
+        [HttpGet]
+        public ActionResult history()
+        {
+            return View(db.Logins.ToList());
+        }
+
+
+       
+        public ActionResult list(string firstNameSearch, string lastNameSearch, string roleSearch)
+        {
+            var query = db.Logins.AsQueryable();
+            if (string.IsNullOrEmpty(firstNameSearch) && string.IsNullOrEmpty(lastNameSearch) && string.IsNullOrEmpty(roleSearch))
+            {
+                ViewBag.Msg = "Enter search values to filter the results.";
+                return View(db.Logins.ToList());
+
+                // Return the full list when search fields are empty
+
+            }
+            else
+            {
+                query = query.Where(u =>
+                    (string.IsNullOrEmpty(firstNameSearch) || u.FirstName.Contains(firstNameSearch)) &&
+                    (string.IsNullOrEmpty(lastNameSearch) || u.LastName.Contains(lastNameSearch)) &&
+                    (string.IsNullOrEmpty(roleSearch) || u.Role.Contains(roleSearch))
+                );
+
+                var filteredList = query.ToList();
+
+                if (filteredList.Count == 0)
+                {
+                    ViewBag.Message = "No matching search results found.";
+                }
+                else
+                {
+                    ViewBag.FilteredList = filteredList;
+                }
+
+                return View(filteredList);
+            }
+        }
 
     }
 }

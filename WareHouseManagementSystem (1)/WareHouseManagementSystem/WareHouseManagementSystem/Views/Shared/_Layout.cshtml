@@ -169,6 +169,7 @@
                     </div>
                 </li>
                 <li class="nav-link">@Html.ActionLink("INVENTORY", "Inventory", "Login")</li>
+
                 @*<li class="nav-link">@Html.ActionLink("REQUEST", "checkOutRequest", "Login")</li>*@
 
                 <li id="requestLink" class="nav-link">
@@ -178,12 +179,16 @@
                 </li>
                 <li class="nav-link sub-link;nav-link" id="checkOutLink" style="display: none;">
                     @Html.ActionLink("Check Out", "checkOutRequest", "Login")
-                <br />
+                    <br />
                     @Html.ActionLink("Check In", "checkOutRequest", "Login")
+                    <br />
+
 
                 </li>
 
-
+                <li class="nav-link">
+                    @Html.ActionLink("History", "history", "Login")
+                </li>
 
 
             </ul>
