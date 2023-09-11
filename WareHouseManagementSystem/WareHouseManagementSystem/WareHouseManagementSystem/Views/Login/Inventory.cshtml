@@ -1,0 +1,149 @@
+﻿@*@model IEnumerable<WareHouseManagementSystem.Login>
+
+        <div>
+        @using (Html.BeginForm("Inventory", "Login", FormMethod.Get))
+        {
+            <p>
+                First Name: @Html.TextBox("firstNameSearch", null)
+                Last Name: @Html.TextBox("lastNameSearch", null)
+                Role: @Html.TextBox("roleSearch", null)
+
+                <input type="submit" value="Search" />
+                <a href="@Url.Action("Inventory", "Login")">Clear</a>
+            </p>
+        }
+    </div>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.password)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Role)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.password)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>*@
+
+
+@model IEnumerable<WareHouseManagementSystem.Login>
+
+<div>
+    @using (Html.BeginForm("Inventory", "Login", FormMethod.Get))
+    {
+        <p>
+            First Name: @Html.TextBox("firstNameSearch", null)
+            Last Name: @Html.TextBox("lastNameSearch", null)
+            Role: @Html.TextBox("roleSearch", null)
+
+            <input type="submit" value="Search" />
+            <a href="@Url.Action("Inventory", "Login")">Clear</a>
+        </p>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    //if (Model != null && Model.Any())
+    //{
+    if (!string.IsNullOrEmpty(ViewBag.Msg))
+    {
+            <p>@ViewBag.Msg</p>
+        }
+        <table class="table">
+            <tr>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.FirstName)*@
+                    ProductName
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.LastName)*@
+                    UPC
+                </th>
+                <!--<th>-->
+                    @*@Html.DisplayNameFor(model => model.username)*@
+                    <!--Quantity
+                </th>
+                <th>-->
+                    @*@Html.DisplayNameFor(model => model.password)*@
+                    <!--Check-In Time
+                </th>
+                <th>-->
+                    @*@Html.DisplayNameFor(model => model.Role)*@
+                    <!--Check-out Time
+                </th>-->
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.password)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>*@
+                    <td>
+                       @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                       @Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                        @Html.ActionLink("more", "list", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    @*else
+    {
+        <p>No items available.</p>
+    }*@
