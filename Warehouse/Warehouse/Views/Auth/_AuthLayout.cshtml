@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Warehouse Wizard</title>
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true"/>
+</head>
+<body class="h-full bg-white">
+
+<partial name="_HeaderPartial"/>
+<div class="flex min-h-full">
+    <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        @RenderBody()
+    </div>
+    <div class="relative hidden w-0 flex-1 lg:block">
+        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80" alt="">
+    </div>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>
