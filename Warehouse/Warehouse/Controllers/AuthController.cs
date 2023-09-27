@@ -33,6 +33,11 @@ public class AuthController : Controller
         return View();
     }
 
+    public IActionResult ResetPassword()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
