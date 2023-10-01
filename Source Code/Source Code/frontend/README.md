@@ -1,4 +1,4 @@
-# University Sports Event Management System
+
 
 ## Commands
 
