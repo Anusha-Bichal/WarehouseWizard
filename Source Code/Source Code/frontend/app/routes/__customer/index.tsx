@@ -15,6 +15,24 @@ import {
 	productStatusLookup,
 } from "~/utils/misc"
 
+export async function loader({request}: DataFunctionArgs) {
+	const userId = await requireUserId(request)
+
+	const products = await prisma.product.findMany({
+		where: {
+			// Status: ProductStatus.CHECKED_IN,
+			UserId: userId,
+		},
+		include: {
+			Warehouse: true,
+		},
+	})
+
+	return json({
+		products,
+	})
+}
+
 export default function CustomerInventory() {
 	return (
 		<>
