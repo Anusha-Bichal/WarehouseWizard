@@ -1,12 +1,13 @@
-import type {LoaderArgs, SerializeFrom} from "@remix-run/node"
+import type {LoaderArgs, SerializeFrom} from  "@remix-run/node"
 import {json, redirect} from "@remix-run/node"
 import {Outlet} from "@remix-run/react"
 import {SettingsIcon} from "lucide-react"
 import {Nav, type NavMenuItems} from "~/components/Nav"
-import {isEmployee, isOwner, requireUserId} from "~/session.server"
+import {isEmployee, isOwner, requireUserId} from  "~/session.server"
 
 export type CustomerLoaderData = SerializeFrom<typeof loader>
-export const loader = async ({request}: LoaderArgs) => {
+export const loader = async ({request}: LoaderArgs) => 
+{
 	await requireUserId(request)
 
 	if (await isOwner(request)) {
@@ -22,7 +23,7 @@ const navMenu: NavMenuItems = [
 	{
 		items: [
 			{
-				name: "Inventory",
+				name:"Inventory",
 				href: `/`,
 				icon: <SettingsIcon width={18} />,
 			},
