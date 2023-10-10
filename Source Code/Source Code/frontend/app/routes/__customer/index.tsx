@@ -1,6 +1,37 @@
-import {TextInput} from "@mantine/core"
-import {SearchIcon} from "lucide-react"
+import {Badge, Button, Divider, Modal, TextInput} from "@mantine/core"
+import {useDisclosure} from "@mantine/hooks"
+import {ProductStatus} from "@prisma/client"
+import type {DataFunctionArgs, SerializeFrom} from "@remix-run/node"
+import {json} from "@remix-run/node"
+import {Link, useLoaderData} from "@remix-run/react"
+import {ArrowRightIcon, SearchIcon} from "lucide-react"
+import {EmptyState} from "~/components/EmptyState"
 import {PageHeading} from "~/components/ui/PageHeading"
+import {prisma} from "~/lib/db.server"
+import {requireUserId} from "~/session.server"
+import {
+	formatDateTime,
+	productStatusColorLookup,
+	productStatusLookup,
+} from "~/utils/misc"
+
+export async function loader({request}: DataFunctionArgs) {
+	const userId = await requireUserId(request)
+
+	const products = await prisma.product.findMany({
+		where: {
+			// Status: ProductStatus.CHECKED_IN,
+			UserId: userId,
+		},
+		include: {
+			Warehouse: true,
+		},
+	})
+
+	return json({
+		products,
+	})
+}
 
 export default function CustomerInventory() {
 	return (
