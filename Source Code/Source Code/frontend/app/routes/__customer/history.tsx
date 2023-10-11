@@ -33,3 +33,7 @@ export async function loader({request}: DataFunctionArgs) {
 			Product: true,
 		},
 	})
+	return json({
+		requests,
+	})
+}
