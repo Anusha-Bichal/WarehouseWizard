@@ -29,20 +29,11 @@ public class DataInitializer
 
         context.User.AddRange(new List<User>
         {
-            new()
-            {
-                Id = new Guid("00000000-0000-0000-0000-000000000002"),
-                Name = "Owner",
-                Email = "owner@app.com",
-                Password = hashedPassword,
-                Role = UserRole.Owner,
-                IsActive = true
-            },
-            new()
+           new()
             {
                 Id = new Guid("00000000-0000-0000-0000-000000000003"),
                 Name = "Employee",
-                Email = "employee@app.com",
+                Email = "pradeepraov26@gmail.com",
                 Password = hashedPassword,
                 Role = UserRole.Employee,
                 IsActive = true
@@ -51,7 +42,7 @@ public class DataInitializer
             {
                 Id = new Guid("00000000-0000-0000-0000-000000000004"),
                 Name = "Customer",
-                Email = "customer@app.com",
+                Email = "Pradeepraoveeramaneni@gmail.com",
                 Password = hashedPassword,
                 Role = UserRole.Customer,
                 IsActive = true
