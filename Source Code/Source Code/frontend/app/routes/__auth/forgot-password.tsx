@@ -42,7 +42,7 @@ export const action = async ({request}: DataFunctionArgs) => {
 			return badRequest<ActionData>({
 				success: false,
 				fieldErrors: {
-					email: "Email is not registered",
+					email: "Email is not authorized.",
 				},
 			})
 		}
