@@ -16,7 +16,7 @@ export default function OwnerInventory() {
 						</Group>
 					</Radio.Group>
 
-					<div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+		                            <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
 						<table className="w-full">
 							<thead>
 								<tr>
