@@ -36,3 +36,21 @@ export async function loader() {
 		requests,
 	})
 }
+type ActionData = {
+	success: boolean
+	fieldErrors?: Record<string, string>
+}
+
+export async function action({request}: ActionArgs) {
+	const formData = await request.formData()
+
+	const requestId = formData.get("requestId")?.toString()
+
+	if (!requestId) {
+		return json<ActionData>({
+			success: false,
+			fieldErrors: {
+				productId: "Request ID is required",
+			},
+		})
+	}
