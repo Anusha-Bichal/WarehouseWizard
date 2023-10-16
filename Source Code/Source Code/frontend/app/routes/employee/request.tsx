@@ -54,3 +54,37 @@ export async function action({request}: ActionArgs) {
 			},
 		})
 	}
+	const intent = formData.get("intent")?.toString()
+
+	if (intent === "approve") {
+		await prisma.$transaction(async (tx) => {
+			const request = await tx.checkOutRequest.update({
+				where: {
+					Id: requestId,
+				},
+				data: {
+					Status: CheckOutStatus.CHECKED_OUT,
+					TrackingId: generateMockUPSTrackingId(),
+				},
+				include: {
+					Product: true,
+					user: true,
+				},
+			})
+
+			await sendMail(
+				request.user.Email,
+				"Your order has been shipped",
+				`Your order for ${request.Product.Name} has been shipped. Tracking ID: ${request.TrackingId}`
+			)
+		})
+
+		return json<ActionData>({
+			success: true,
+		})
+	}
+
+	return json<ActionData>({
+		success: true,
+	})
+}
