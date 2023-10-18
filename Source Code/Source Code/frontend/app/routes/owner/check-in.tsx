@@ -11,7 +11,7 @@ export default function OwnerInventory() {
 
 					<div>
 						<TextInput
-							label="Tracking Number"
+						        label="Tracking Number"
 							placeholder="Search tracking number"
 							rightSection={<SearchIcon size={18} className="text-gray-500" />}
 						/>
