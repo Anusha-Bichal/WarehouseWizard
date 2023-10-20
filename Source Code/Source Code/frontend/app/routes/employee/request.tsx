@@ -88,3 +88,27 @@ export async function action({request}: ActionArgs) {
 		success: true,
 	})
 }
+type FilterStatus = "all" | CheckOutStatus
+
+export default function OwnerRequest() {
+	const {requests} = useLoaderData<typeof loader>()
+
+	const [searchQuery, setSearchQuery] = React.useState("")
+	const [filter, setFilter] = React.useState<FilterStatus>("all")
+	const filteredRequests = React.useMemo(() => {
+		const lowerSearchQuery = searchQuery ? searchQuery.toLowerCase() : null
+
+		return requests.filter((request) => {
+			const isNameMatch = lowerSearchQuery
+				? request.user.Name.toLowerCase().includes(lowerSearchQuery)
+				: true
+
+			const isProductMatch = lowerSearchQuery
+				? request.Product.Name.toLowerCase().includes(lowerSearchQuery)
+				: true
+
+			const isStatusMatch = filter === "all" ? true : request.Status === filter
+
+			return (isNameMatch || isProductMatch) && isStatusMatch
+		})
+	}, [filter, requests, searchQuery])
