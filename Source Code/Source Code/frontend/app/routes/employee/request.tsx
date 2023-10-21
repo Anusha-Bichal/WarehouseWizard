@@ -338,3 +338,31 @@ function RequestRow({
 		</>
 	)
 }
+return (
+	<>
+		<div className="flex max-w-screen-xl flex-col gap-12 p-10">
+			<div className="flex flex-col gap-12">
+				<PageHeading title="REQUEST" />
+
+				<div className="max-w-md">
+					<TextInput
+						label="Search"
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.currentTarget.value)}
+						placeholder="Search by Product name or Customer Name"
+						rightSectionPointerEvents="all"
+						rightSection={
+							<CloseButton
+								aria-label="Clear input"
+								onClick={() => setSearchQuery("")}
+								style={{display: searchQuery ? undefined : "none"}}
+							/>
+						}
+					/>
+				</div>
+
+				<Radio.Group
+					defaultValue="all"
+					value={filter}
+					onChange={(val) => setFilter(val as FilterStatus)}
+				>
