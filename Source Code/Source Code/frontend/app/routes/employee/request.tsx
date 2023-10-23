@@ -366,3 +366,45 @@ return (
 					value={filter}
 					onChange={(val) => setFilter(val as FilterStatus)}
 				>
+				<Group mt="xs">
+							<Radio value="all" label="All" />
+							<Radio value={CheckOutStatus.PENDING} label="Pending" />
+							<Radio value={CheckOutStatus.CHECKED_OUT} label="Processed" />
+						</Group>
+					</Radio.Group>
+
+					{filteredRequests.length > 0 ? (
+						<div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+							<table className="w-full">
+								<thead>
+									<tr>
+										<th className="px-4 py-2">Tracking ID</th>
+										<th className="px-4 py-2">Customer Name</th>
+										<th className="px-4 py-2">Product</th>
+										<th className="px-4 py-2">Quantity</th>
+										<th className="px-4 py-2">Status</th>
+										<th className="px-4 py-2">Details</th>
+										<th className="px-4 py-2"></th>
+									</tr>
+								</thead>
+								<tbody>
+									{filteredRequests.map((request) => (
+										<RequestRow key={request.Id} request={request} />
+									))}
+								</tbody>
+							</table>
+						</div>
+					) : (
+						<EmptyState
+							message={
+								filter === "all"
+									? "No requests found"
+									: "No requests found with this filter"
+							}
+						/>
+					)}
+				</div>
+			</div>
+		</>
+	)
+}
