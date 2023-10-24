@@ -408,3 +408,113 @@ return (
 		</>
 	)
 }
+function RequestRow({
+	request,
+}: {
+	request: SerializeFrom<typeof loader>["requests"][0]
+}) {
+	const fetcher = useFetcher<ActionData>()
+	const isSubmitting = fetcher.state !== "idle"
+
+	const [isModalOpen, handleModal] = useDisclosure(false)
+
+	return (
+		<>
+			<tr>
+				<td className="border px-4 py-2 text-center">
+					{request.TrackingId ?? "-"}
+				</td>
+				<td className="border px-4 py-2">{request.user.Name}</td>
+				<td className="border px-4 py-2">{request.Product.Name}</td>
+				<td className="border px-4 py-2">{request.Quantity}</td>
+				<td className="border px-4 py-2 text-center">
+					<Badge
+						variant="light"
+						color={checkOutStatusColorLookup[request.Status]}
+						radius="xs"
+					>
+						{checkOutStatusLabelLookup[request.Status]}
+					</Badge>
+				</td>
+				<td className="border px-4 py-2">
+					<button
+						className="focus:none text-sm text-blue-700 hover:underline"
+						onClick={handleModal.open}
+					>
+						Check
+					</button>
+				</td>
+				<td className="border px-4 py-2">
+					{request.Status === CheckOutStatus.PENDING && (
+						<>
+							<fetcher.Form method="POST" className="flex items-center gap-4">
+								<input hidden name="requestId" defaultValue={request.Id} />
+								<input
+									hidden
+									name="productId"
+									defaultValue={request.ProductId}
+								/>
+								<Button
+									size="compact-sm"
+									type="submit"
+									variant="white"
+									name="intent"
+									value="approve"
+									color="green"
+									loading={isSubmitting}
+								>
+									Approve
+								</Button>
+							</fetcher.Form>
+						</>
+					)}
+				</td>
+			</tr>
+
+			<Modal
+				title="Shipping Details"
+				opened={isModalOpen}
+				onClose={handleModal.close}
+			>
+				<Divider />
+
+				<div className="mt-8 flex flex-col gap-4">
+					<p className="flex items-center gap-2">
+						<strong>Name:</strong>
+						<span>{request.CustomerName}</span>
+					</p>
+					<p className="flex items-center gap-2">
+						<strong>Phone:</strong>
+						<span>{request.CustomerPhone}</span>
+					</p>
+					<p className="flex items-center gap-2">
+						<strong>Address 1:</strong>
+						<span>{request.CustomerAddress1}</span>
+					</p>
+					{request.CustomerAddress2 && (
+						<p className="flex items-center gap-2">
+							<strong>Address 2:</strong>
+							<span>{request.CustomerAddress2}</span>
+						</p>
+					)}
+
+					<p className="flex items-center gap-2">
+						<strong>City:</strong>
+						<span>{request.CustomerCity}</span>
+					</p>
+
+					<p className="flex items-center gap-2">
+						<strong>State:</strong>
+						<span>{request.CustomerState}</span>
+					</p>
+
+					<p className="flex items-center gap-2">
+						<strong>Zip:</strong>
+						<span>{request.CustomerZip}</span>
+					</p>
+				</div>
+			</Modal>
+		</>
+	)
+}
+
