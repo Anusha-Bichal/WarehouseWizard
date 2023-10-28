@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "css:build": "npx tailwindcss -i ./Styles/Tailwind.css -o ./wwwroot/css/app.css --minify"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.3.3"
-  }
-}
