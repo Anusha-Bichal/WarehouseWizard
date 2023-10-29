@@ -9,14 +9,6 @@ export default function OwnerInventory() {
         <div className="flex flex-col gap-12">
           <PageHeading title="CHECK IN" />
 
-          <div>
-            <TextInput
-              label="Tracking Number"
-              placeholder="Search tracking number"
-              rightSection={<SearchIcon size={18} className="text-gray-500" />}
-            />
-          </div>
-
           <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
             <table className="w-full">
               <thead>
