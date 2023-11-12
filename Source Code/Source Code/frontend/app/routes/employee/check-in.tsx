@@ -147,6 +147,9 @@ export default function OwnerInventory() {
 
 	const fetcher = useFetcher<ActionData>()
 	const isSubmitting = fetcher.state !== "idle"
+	const [customerId, setCustomerId] = React.useState<
+	(typeof customers)[number]["Id"] | null
+		>(null)
 
 	return (
 		<>
