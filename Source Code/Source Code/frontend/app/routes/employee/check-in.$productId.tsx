@@ -181,87 +181,92 @@ export default function OwnerInventory() {
 
 	const fetcher = useFetcher<ActionData>()
 	const isSubmitting = fetcher.state !== "idle"
+	const [customerId, setCustomerId] = React.useState<typeof customers[number]["Id"] | null>(product.UserId);
 
 	return (
-		<>
-			<div className="flex max-w-screen-xl flex-col gap-12 p-10">
-				<fetcher.Form method="post" className="flex flex-col gap-12">
-					<PageHeading title="UPDATE PRODUCT" />
-
-					<div className="flex flex-col gap-4">
-						<TextInput
-							name="name"
-							label="Product Name"
-							placeholder="Enter product name"
-							defaultValue={product.Name}
-							error={fetcher.data?.fieldErrors?.name}
-							required
-						/>
-
-						<TextInput
-							name="upc"
-							label="UPC"
-							placeholder="Enter UPC"
-							defaultValue={product.UPC}
-							error={fetcher.data?.fieldErrors?.upc}
-							required
-						/>
-
-						<NumberInput
-							name="quantity"
-							label="Quantity"
-							placeholder="Enter quantity"
-							defaultValue={product.Quantity}
-							error={fetcher.data?.fieldErrors?.quantity}
-							min={0}
-							required
-						/>
-
-						<Select
-							label="Customer"
-							name="customerId"
-							defaultValue={product.UserId}
-							placeholder="Select customer"
-							data={customers.map((customer) => ({
-								value: customer.Id,
-								label: customer.Name,
-							}))}
-							required
-						/>
-
-						<Select
-							name="condition"
-							label="Condition"
-							data={Object.values(Condition).map((condition) => ({
-								value: condition,
-								label: condition,
-							}))}
-							error={fetcher.data?.fieldErrors?.condition}
-							defaultValue={product.Condition ?? Condition.NEW}
-						/>
-
-						<Textarea
-							name="memo"
-							label="Memo"
-							defaultValue={product.Memo || undefined}
-							placeholder="Enter memo"
-							minRows={6}
-						/>
-
-						<Checkbox
-							name="return"
-							label="Return"
-							defaultChecked={product.Return}
-						/>
-					</div>
-
-					<div className="flex items-center justify-end">
-						<Button type="submit" loading={isSubmitting}>
-							Update
-						</Button>
-					</div>
-				</fetcher.Form>
+	  <>
+		  <div className="flex h-full max-w-screen-xl flex-col gap-8 bg-white py-2">
+			  <fetcher.Form method="post" className="flex flex-col gap-12">
+				  <div className="mt-6 px-10">
+					  <PageHeading title="UPDATE PRODUCT" />
+				  </div>
+	  
+				<div className="flex flex-1 flex-col gap-8 rounded-tl-3xl bg-blue-50 px-10 py-8">
+				  <div className="flex flex-col gap-4">
+					<TextInput
+					  name="name"
+					  label="Product Name"
+					  placeholder="Enter product name"
+					  defaultValue={product.Name}
+					  error={fetcher.data?.fieldErrors?.name}
+					  required
+					/>
+	  
+					<TextInput
+					  name="upc"
+					  label="UPC"
+					  placeholder="Enter UPC"
+					  defaultValue={product.UPC}
+					  error={fetcher.data?.fieldErrors?.upc}
+					  required
+					/>
+	  
+					<NumberInput
+					  name="quantity"
+					  label="Quantity"
+					  placeholder="Enter quantity"
+					  defaultValue={product.Quantity.toString()}
+					  error={fetcher.data?.fieldErrors?.quantity}
+					  min={0}
+					  required
+					/>
+	  
+					<Select
+					  label="Customer"
+					  name="customerId"
+					  defaultValue={product.UserId}
+					  placeholder="Select customer"
+					  data={customers.map((customer) => ({
+						value: customer.Id,
+						label: customer.Name,
+					  }))}
+					  required
+					/>
+	  
+					<Select
+					  name="condition"
+					  label="Condition"
+					  data={Object.values(Condition).map((condition) => ({
+						value: condition,
+						label: condition,
+					  }))}
+					  error={fetcher.data?.fieldErrors?.condition}
+					  defaultValue={product.Condition ?? Condition.NEW}
+					/>
+	  
+					<Textarea
+					  name="memo"
+					  label="Memo"
+					  defaultValue={product.Memo || undefined}
+					  placeholder="Enter memo"
+					  minRows={6}
+					/>
+	  
+					<Checkbox
+					  name="return"
+					  label="Return"
+					  defaultChecked={product.Return}
+					/>
+				  </div>
+	  
+				  <div className="flex items-center justify-end">
+					<Button type="submit" loading={isSubmitting}>
+					  Update
+					</Button>
+				  </div>
 			</div>
-		</>
-	)
-}
+		  </fetcher.Form>
+		</div>
+	  </>
+	);
+  }
