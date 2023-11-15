@@ -6,11 +6,12 @@ import {
 	Group,
 	Modal,
 	Radio,
+	Select,
 	TextInput,
 } from "@mantine/core"
 import {useDisclosure} from "@mantine/hooks"
 import {CheckOutStatus} from "@prisma/client"
-import type {ActionArgs, SerializeFrom} from "@remix-run/node"
+import type {DataFunctionArgs, SerializeFrom} from "@remix-run/node"
 import {json} from "@remix-run/node"
 import {useFetcher, useLoaderData} from "@remix-run/react"
 import * as React from "react"
@@ -18,15 +19,20 @@ import {EmptyState} from "~/components/EmptyState"
 import {PageHeading} from "~/components/ui/PageHeading"
 import {prisma} from "~/lib/db.server"
 import {sendMail} from "~/lib/mail.server"
+import {getAllCustomers} from "~/lib/user.server"
+
 import {
 	checkOutStatusColorLookup,
 	checkOutStatusLabelLookup,
 	cn,
-	generateMockUPSTrackingId,
 } from "~/utils/misc"
 
 export async function loader() {
+	const customers = await getAllCustomers()
 	const requests = await prisma.checkOutRequest.findMany({
+		orderBy: {
+			UpdatedAt: "desc",
+		},
 		include: {
 			user: true,
 			Product: true,
@@ -35,6 +41,7 @@ export async function loader() {
 	})
 
 	return json({
+		customers,
 		requests: requests.map((request) => ({
 			...request,
 			Files: request.Files.map((file) => ({
@@ -50,7 +57,7 @@ type ActionData = {
 	fieldErrors?: Record<string, string>
 }
 
-export async function action({request}: ActionArgs) {
+export async function action({request}: DataFunctionArgs) {
 	const formData = await request.formData()
 
 	const requestId = formData.get("requestId")?.toString()
@@ -74,7 +81,6 @@ export async function action({request}: ActionArgs) {
 				},
 				data: {
 					Status: CheckOutStatus.CHECKED_OUT,
-					TrackingId: generateMockUPSTrackingId(),
 				},
 				include: {
 					Product: true,
@@ -102,74 +108,126 @@ export async function action({request}: ActionArgs) {
 type FilterStatus = "all" | CheckOutStatus
 
 export default function OwnerRequest() {
-	const {requests} = useLoaderData<typeof loader>()
+	const {requests, customers} = useLoaderData<typeof loader>()
 
-	const [searchQuery, setSearchQuery] = React.useState("")
-	const [filter, setFilter] = React.useState<FilterStatus>("all")
+	const [filter, setFilter] = React.useState<FilterStatus>(CheckOutStatus.PENDING)
+	const [queryProduct, setQueryProduct] = React.useState("")
+	const [queryTrackingId, setQueryTrackingId] = React.useState("")
+	const [customerId, setCustomerId] = React.useState<
+		(typeof customers)[number]["Id"] | null
+	>(null)
+
 	const filteredRequests = React.useMemo(() => {
-		const lowerSearchQuery = searchQuery ? searchQuery.toLowerCase() : null
+		let _products = requests
+		const _queryProduct = queryProduct.trim()
 
-		return requests.filter((request) => {
-			const isNameMatch = lowerSearchQuery
-				? request.user.Name.toLowerCase().includes(lowerSearchQuery)
-				: true
+		const _queryTrackingId = queryTrackingId.trim()
+		if (_queryProduct) {
+			_products = _products.filter((request) => {
+				return request.Product.Name.toLowerCase().includes(
+					_queryProduct.toLowerCase()
+				)
+			})
+		}
 
-			const isProductMatch = lowerSearchQuery
-				? request.Product.Name.toLowerCase().includes(lowerSearchQuery)
-				: true
+		if (customerId) {
+			_products = _products.filter((request) => {
+				return request.userId === customerId
+			})
+		}
 
-			const isStatusMatch = filter === "all" ? true : request.Status === filter
+		if (_queryTrackingId) {
+			_products = _products.filter((request) => {
+				return request.TrackingId?.toLowerCase().includes(
+					_queryTrackingId.toLowerCase()
+				)
+			})
+		}
 
-			return (isNameMatch || isProductMatch) && isStatusMatch
+		_products = _products.filter((request) => {
+			return filter === "all" ? true : request.Status === filter
 		})
-	}, [filter, requests, searchQuery])
+
+		return _products
+	}, [requests, queryProduct, customerId, queryTrackingId, filter])
 
 	return (
 		<>
-			<div className="flex max-w-screen-xl flex-col gap-12 p-10">
-				<div className="flex flex-col gap-12">
+			<div className="flex h-full max-w-screen-xl flex-col gap-8 bg-white py-2">
+				<div className="mt-6 px-10">
 					<PageHeading title="REQUEST" />
+				</div>
 
-					<div className="max-w-md">
+				<div className="flex flex-1 flex-col gap-8 rounded-tl-3xl bg-blue-50 px-10 py-8">
+					<div className="flex max-w-lg items-center gap-4">
 						<TextInput
-							label="Search"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.currentTarget.value)}
-							placeholder="Search by Product name or Customer Name"
+							label="Tracking ID"
+							value={queryTrackingId}
+							onChange={(e) => setQueryTrackingId(e.currentTarget.value)}
+							placeholder="Search by Tracking ID"
 							rightSectionPointerEvents="all"
 							rightSection={
 								<CloseButton
 									aria-label="Clear input"
-									onClick={() => setSearchQuery("")}
-									style={{display: searchQuery ? undefined : "none"}}
+									onClick={() => setQueryTrackingId("")}
+									style={{display: queryTrackingId ? undefined : "none"}}
 								/>
 							}
+						/>
+
+						<TextInput
+							label="Product"
+							value={queryProduct}
+							onChange={(e) => setQueryProduct(e.currentTarget.value)}
+							placeholder="Search by Product"
+							rightSectionPointerEvents="all"
+							rightSection={
+								<CloseButton
+									aria-label="Clear input"
+									onClick={() => setQueryProduct("")}
+									style={{display: queryProduct ? undefined : "none"}}
+								/>
+							}
+						/>
+
+                        <Select
+							label="Customer"
+							searchable
+							value={customerId}
+							onChange={setCustomerId}
+							placeholder="Select a customer"
+							clearable
+							data={customers.map((customer) => ({
+								value: customer.Id,
+								label: customer.Name,
+							}))}
 						/>
 					</div>
 
 					<Radio.Group
-						defaultValue="all"
+						defaultValue={CheckOutStatus.PENDING}
 						value={filter}
 						onChange={(val) => setFilter(val as FilterStatus)}
 					>
 						<Group mt="xs">
-							<Radio value="all" label="All" />
 							<Radio value={CheckOutStatus.PENDING} label="Pending" />
 							<Radio value={CheckOutStatus.CHECKED_OUT} label="Processed" />
+							<Radio value="all" label="All" />
 						</Group>
 					</Radio.Group>
+
 
 					{filteredRequests.length > 0 ? (
 						<div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
 							<table className="w-full">
 								<thead>
 									<tr>
-										<th className="px-4 py-2">Tracking ID</th>
 										<th className="px-4 py-2">Customer Name</th>
 										<th className="px-4 py-2">Product</th>
 										<th className="px-4 py-2">Quantity</th>
 										<th className="px-4 py-2">Status</th>
 										<th className="px-4 py-2">Details</th>
+										<th className="px-4 py-2">Created At</th>
 										<th className="px-4 py-2"></th>
 									</tr>
 								</thead>
@@ -213,9 +271,6 @@ function RequestRow({
 	return (
 		<>
 			<tr>
-				<td className="border px-4 py-2 text-center">
-					{request.TrackingId ?? "-"}
-				</td>
 				<td className="border px-4 py-2">{request.user.Name}</td>
 				<td className="border px-4 py-2">{request.Product.Name}</td>
 				<td className="border px-4 py-2">{request.Quantity}</td>
@@ -235,6 +290,9 @@ function RequestRow({
 					>
 						Check
 					</button>
+				</td>
+				<td className="border px-4 py-2">
+					{new Date(request.CreatedAt).toLocaleString()}
 				</td>
 				<td className="border px-4 py-2">
 					{request.Status === CheckOutStatus.PENDING && (
@@ -338,183 +396,3 @@ function RequestRow({
 		</>
 	)
 }
-return (
-	<>
-		<div className="flex max-w-screen-xl flex-col gap-12 p-10">
-			<div className="flex flex-col gap-12">
-				<PageHeading title="REQUEST" />
-
-				<div className="max-w-md">
-					<TextInput
-						label="Search"
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.currentTarget.value)}
-						placeholder="Search by Product name or Customer Name"
-						rightSectionPointerEvents="all"
-						rightSection={
-							<CloseButton
-								aria-label="Clear input"
-								onClick={() => setSearchQuery("")}
-								style={{display: searchQuery ? undefined : "none"}}
-							/>
-						}
-					/>
-				</div>
-
-				<Radio.Group
-					defaultValue="all"
-					value={filter}
-					onChange={(val) => setFilter(val as FilterStatus)}
-				>
-				<Group mt="xs">
-							<Radio value="all" label="All" />
-							<Radio value={CheckOutStatus.PENDING} label="Pending" />
-							<Radio value={CheckOutStatus.CHECKED_OUT} label="Processed" />
-						</Group>
-					</Radio.Group>
-
-					{filteredRequests.length > 0 ? (
-						<div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-							<table className="w-full">
-								<thead>
-									<tr>
-										<th className="px-4 py-2">Tracking ID</th>
-										<th className="px-4 py-2">Customer Name</th>
-										<th className="px-4 py-2">Product</th>
-										<th className="px-4 py-2">Quantity</th>
-										<th className="px-4 py-2">Status</th>
-										<th className="px-4 py-2">Details</th>
-										<th className="px-4 py-2"></th>
-									</tr>
-								</thead>
-								<tbody>
-									{filteredRequests.map((request) => (
-										<RequestRow key={request.Id} request={request} />
-									))}
-								</tbody>
-							</table>
-						</div>
-					) : (
-						<EmptyState
-							message={
-								filter === "all"
-									? "No requests found"
-									: "No requests found with this filter"
-							}
-						/>
-					)}
-				</div>
-			</div>
-		</>
-	)
-}
-function RequestRow({
-	request,
-}: {
-	request: SerializeFrom<typeof loader>["requests"][0]
-}) {
-	const fetcher = useFetcher<ActionData>()
-	const isSubmitting = fetcher.state !== "idle"
-
-	const [isModalOpen, handleModal] = useDisclosure(false)
-
-	return (
-		<>
-			<tr>
-				<td className="border px-4 py-2 text-center">
-					{request.TrackingId ?? "-"}
-				</td>
-				<td className="border px-4 py-2">{request.user.Name}</td>
-				<td className="border px-4 py-2">{request.Product.Name}</td>
-				<td className="border px-4 py-2">{request.Quantity}</td>
-				<td className="border px-4 py-2 text-center">
-					<Badge
-						variant="light"
-						color={checkOutStatusColorLookup[request.Status]}
-						radius="xs"
-					>
-						{checkOutStatusLabelLookup[request.Status]}
-					</Badge>
-				</td>
-				<td className="border px-4 py-2">
-					<button
-						className="focus:none text-sm text-blue-700 hover:underline"
-						onClick={handleModal.open}
-					>
-						Check
-					</button>
-				</td>
-				<td className="border px-4 py-2">
-					{request.Status === CheckOutStatus.PENDING && (
-						<>
-							<fetcher.Form method="POST" className="flex items-center gap-4">
-								<input hidden name="requestId" defaultValue={request.Id} />
-								<input
-									hidden
-									name="productId"
-									defaultValue={request.ProductId}
-								/>
-								<Button
-									size="compact-sm"
-									type="submit"
-									variant="white"
-									name="intent"
-									value="approve"
-									color="green"
-									loading={isSubmitting}
-								>
-									Approve
-								</Button>
-							</fetcher.Form>
-						</>
-					)}
-				</td>
-			</tr>
-
-			<Modal
-				title="Shipping Details"
-				opened={isModalOpen}
-				onClose={handleModal.close}
-			>
-				<Divider />
-
-				<div className="mt-8 flex flex-col gap-4">
-					<p className="flex items-center gap-2">
-						<strong>Name:</strong>
-						<span>{request.CustomerName}</span>
-					</p>
-					<p className="flex items-center gap-2">
-						<strong>Phone:</strong>
-						<span>{request.CustomerPhone}</span>
-					</p>
-					<p className="flex items-center gap-2">
-						<strong>Address 1:</strong>
-						<span>{request.CustomerAddress1}</span>
-					</p>
-					{request.CustomerAddress2 && (
-						<p className="flex items-center gap-2">
-							<strong>Address 2:</strong>
-							<span>{request.CustomerAddress2}</span>
-						</p>
-					)}
-
-					<p className="flex items-center gap-2">
-						<strong>City:</strong>
-						<span>{request.CustomerCity}</span>
-					</p>
-
-					<p className="flex items-center gap-2">
-						<strong>State:</strong>
-						<span>{request.CustomerState}</span>
-					</p>
-
-					<p className="flex items-center gap-2">
-						<strong>Zip:</strong>
-						<span>{request.CustomerZip}</span>
-					</p>
-				</div>
-			</Modal>
-		</>
-	)
-}
-
