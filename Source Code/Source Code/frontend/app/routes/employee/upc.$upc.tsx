@@ -70,10 +70,12 @@ export default function ProductUPC() {
 
 	return (
 		<>
-			<div className="flex max-w-screen-xl flex-col gap-12 p-10">
-				<div className="flex flex-col gap-12">
+			<div className="flex h-full max-w-screen-xl flex-col gap-8 bg-white py-2">
+				<div className="mt-6 px-10">
 					<PageHeading title="PRODUCT UPC HISTORY" />
+				</div>
 
+				<div className="flex flex-1 flex-col gap-8 rounded-tl-3xl bg-blue-50 px-10 py-8">
 					<div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
 						<table className="w-full">
 							<thead>
