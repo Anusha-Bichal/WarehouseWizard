@@ -41,7 +41,7 @@ export async function action({request}: ActionFunctionArgs) {
 				fieldErrors,
 				success: false,
 			},
-			400
+			401 
 		)
 	}
 
