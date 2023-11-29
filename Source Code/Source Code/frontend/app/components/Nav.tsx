@@ -1,4 +1,4 @@
-import {Avatar, Divider, ScrollArea} from "@mantine/core"
+import {Avatar, Divider, ScrollArea, Tooltip} from "@mantine/core"
 import {NavLink, useLocation} from "@remix-run/react"
 import {Menu} from "lucide-react"
 import * as React from "react"
@@ -44,14 +44,38 @@ export function Nav(props: NavProps) {
 
 			<div
 				className={cn(
-					"fixed z-10 flex h-full w-full transform flex-col gap-4 transition-all sm:w-64 sm:translate-x-0",
+					"fixed z-10 flex h-full w-full transform flex-col gap-4 transition-all sm:w-56 sm:translate-x-0",
 					showSidebar ? "translate-x-0" : "-translate-x-full"
 				)}
 			>
-				<div className="flex h-full flex-col bg-stone-700 p-4 ring-1 ring-stone-700">
-					<div className="h-6"></div>
+				<div className="relative flex h-full flex-col gap-8 bg-white p-4">
+					<img src="/logo.png" alt="" className="mx-auto h-12 w-12" />
 
-					<ScrollArea classNames={{root: "flex-1 mt-8"}}>
+					<div className="flex w-full items-center justify-between">
+						<div className="flex w-full flex-1 flex-col rounded-lg px-2 py-1">
+							<div className="flex justify-between">
+								<Avatar
+									src={undefined}
+									alt={`${user.name}'s avatar`}
+									radius="xl"
+									color="blue"
+									size="lg"
+								>
+									{getInitials(user.name)}
+								</Avatar>
+
+								<Tooltip label="Logout" withArrow>
+									<div>
+										<LogoutButton />
+									</div>
+								</Tooltip>
+							</div>
+							<p className="mt-4 truncate text-sm font-medium">{user.name}</p>
+							<p className="truncate text-xs text-gray-500">{user.email}</p>
+						</div>
+					</div>
+
+					<ScrollArea classNames={{root: "flex-1"}}>
 						<div className="flex flex-col gap-4">
 							{menuItems.map(({title, items}, idx) => {
 								const showDivider = idx !== menuItems.length - 1
@@ -60,7 +84,7 @@ export function Nav(props: NavProps) {
 									<React.Fragment key={idx}>
 										<div className="flex flex-col gap-1">
 											{title && (
-												<p className="text-xss font-semibold uppercase text-gray-300">
+												<p className="text-xss font-semibold uppercase text-black">
 													{title}
 												</p>
 											)}
@@ -74,13 +98,31 @@ export function Nav(props: NavProps) {
 														prefetch="intent"
 														className={({isActive}) =>
 															cn(
-																"flex items-center space-x-3 rounded-lg px-2 py-1.5 text-gray-300 transition-all duration-150 ease-in-out hover:bg-stone-500 active:bg-stone-600",
-																isActive && "bg-stone-500 text-gray-100"
+																"relative flex items-center space-x-3 rounded-lg  py-1.5 pl-3 pr-2 text-gray-400 transition-all duration-150 ease-in-out  hover:text-black",
+																isActive && "font-bold text-black"
 															)
 														}
 													>
-														{icon}
-														<span className="text-sm font-medium">{name}</span>
+														{({isActive}) => (
+															<>
+																<div
+																	className={cn(
+																		"absolute h-1 w-4 bg-orange-500",
+																		"left-0 top-1/2 -translate-y-1/2 transform",
+																		isActive || "hidden"
+																	)}
+																></div>
+																{icon}
+																<span
+																	className={cn(
+																		"text-sm font-medium",
+																		isActive && "font-bold"
+																	)}
+																>
+																	{name}
+																</span>
+															</>
+														)}
 													</NavLink>
 												))}
 											</div>
@@ -93,27 +135,7 @@ export function Nav(props: NavProps) {
 						</div>
 					</ScrollArea>
 
-					<div>
-						<div className="my-2 border-t border-stone-700" />
-						<div className="flex w-full items-center justify-between">
-							<div className="flex w-full flex-1 items-center space-x-3 truncate rounded-lg px-2 py-1.5 text-white">
-								<Avatar
-									src={undefined}
-									alt={`${user.name}'s avatar`}
-									radius="xl"
-									color="dark"
-									size={28}
-								>
-									{getInitials(user.name)}
-								</Avatar>
-								<span className="truncate text-sm font-medium">
-									{user.name}
-								</span>
-							</div>
-
-							<LogoutButton />
-						</div>
-					</div>
+					<div></div>
 				</div>
 			</div>
 		</>
